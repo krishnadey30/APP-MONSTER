@@ -12,17 +12,7 @@ session_start();
     	echo("Cookie_name :".$_COOKIE[$cookie_name]);
     }
 ?>
-<?php  if (!isset($_SESSION['username'])) : ?>
-<html lang="en" >
-<head>
-    <meta charset="UTF-8">
-    <title>LOGIN </title>
-    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
-    <link rel="stylesheet" href="css/style1.css">  
-</head>
-
-<body>
-    <?php
+<?php
         $username = "root";
         $servername = "localhost";
         $password = "krishna";
@@ -96,10 +86,55 @@ session_start();
         	return $data;
         }
     ?>
+    <?php
+        if(strlen($choose)>1 && strlen($choose1)>1 && strlen($choose2)>1)
+        {   
+        	$choose2=md5($choose2);
+            $v1 = "INSERT INTO Users(username,email,password) VALUES ('$choose','$choose1','$choose2')";
+            echo $v1;
+            if(mysqli_query($conn,$v1))
+            {
+            	$v1="SELECT * FROM Users WHERE username='$choose'";
+            	echo $v1;
+            	$f=mysqli_query($conn,$v1);
+            	$row=mysqli_fetch_assoc($f);
+            	$_SESSION['userid']=$row["userid"];
+                $_SESSION['username'] = $row["username"];
+			  	$_SESSION['success'] = "You are now logged in";
+			  	header('location: index.php');
+            }
+        }
+    ?>
+    <?php
+	    $name=$_POST["lname"];
+	    $password=$_POST["lpassword"];
+	    $password=md5($password);
+	    $v2 = "SELECT * FROM Users";
+	    $p1 = mysqli_query($conn,$v2);
+	    if(mysqli_num_rows($p1)>0)
+	    {
+	    	while($row=mysqli_fetch_assoc($p1))
+	    	{
+	    		if($row["username"]==$name && $row["password"]==$password)
+	    		{
+	    			$_SESSION["userid"] = $row["userid"];
+	    			$_SESSION['username'] = $name;
+				  	$_SESSION['success'] = "You are now logged in";
+				  	header('location: index.php');
+	    		}
+	    	}
+	    }
+	?>
+<?php  if (!isset($_SESSION['username'])) : ?>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>LOGIN </title>
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <link rel="stylesheet" href="css/style1.css">  
+</head>
 
-
-
-
+<body>
     <!-- LOGIN MODULE -->
     <div class="login">
         <div class="wrap">
@@ -143,22 +178,7 @@ session_start();
                                 <br><br><br>
                                 <center><input type="submit"  value="Sign Up"></center>
                             </form>
-                            <?php
-                                if(strlen($choose)>1 && strlen($choose1)>1 && strlen($choose2)>1)
-                                {   
-
-                                    $v1 = "INSERT INTO Users(username,email,password) VALUES ('$choose','$choose1','$choose2')";
-                                    $f=mysqli_query($conn,$v1);
-                                    if($f)
-                                    {
-                                    	$row=mysqli_fetch_assoc($f);
-                                    	$_SESSION['userid']=$row["userid"];
-                                        $_SESSION['username'] = $row["username"];
-									  	$_SESSION['success'] = "You are now logged in";
-									  	header('location: index.php');
-                                    }
-                                }
-                            ?>
+                            
                         </div>
                     <!-- TABS CONTENT LOGIN -->
                         <div id="login-tab-content">
@@ -169,25 +189,7 @@ session_start();
                                 <!--	<label for="remember_me">Remember me</label><br>-->
                                 <center><input type="submit" value="Login"></center>
                             </form>
-                            <?php
-                                $name=$_POST["lname"];
-                                $password=$_POST["lpassword"];
-                                $v2 = "SELECT * FROM Users";
-                                $p1 = mysqli_query($conn,$v2);
-                                if(mysqli_num_rows($p1)>0)
-                                {
-                                	while($row=mysqli_fetch_assoc($p1))
-                                	{
-                                		if($row["username"]==$name && $row["password"]==$password)
-                                		{
-                                			$_SESSION["userid"] = $row["userid"];
-                                			$_SESSION['username'] = $name;
-										  	$_SESSION['success'] = "You are now logged in";
-										  	header('location: index.php');
-                                		}
-                                	}
-                                }
-                            ?>
+                            
                         </div>
                     </div>
                 </div>
