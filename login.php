@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+session_start();
     $cookie_name = $_POST["name"];
     $cookie_password =$_POST["password"];
 
@@ -8,10 +9,10 @@
     {
     	setcookie($cookie_name,$cookie_password,time() + (86400 * 30), "/");
     	echo("Cookie is set!");
-    	echo("Cookie_name :".$_COOKIE["user"]);
+    	echo("Cookie_name :".$_COOKIE[$cookie_name]);
     }
 ?>
-
+<?php  if (!isset($_SESSION['username'])) : ?>
 <html lang="en" >
 <head>
     <meta charset="UTF-8">
@@ -147,11 +148,14 @@
                                 {   
 
                                     $v1 = "INSERT INTO Users(username,email,password) VALUES ('$choose','$choose1','$choose2')";
-
-                                    if(mysqli_query($conn,$v1))
+                                    $f=mysqli_query($conn,$v1);
+                                    if($f)
                                     {
-                                        echo("inserted !");
-
+                                    	$row=mysqli_fetch_assoc($f);
+                                    	$_SESSION['userid']=$row["userid"];
+                                        $_SESSION['username'] = $row["username"];
+									  	$_SESSION['success'] = "You are now logged in";
+									  	header('location: index.php');
                                     }
                                 }
                             ?>
@@ -176,7 +180,10 @@
                                 	{
                                 		if($row["username"]==$name && $row["password"]==$password)
                                 		{
-                                			header("location:index.php");
+                                			$_SESSION["userid"] = $row["userid"];
+                                			$_SESSION['username'] = $name;
+										  	$_SESSION['success'] = "You are now logged in";
+										  	header('location: index.php');
                                 		}
                                 	}
                                 }
@@ -191,3 +198,7 @@
     <script  src="js/index1.js"></script>
 </body>
 </html>
+<?php else: ?>
+  <?php header('location: index.php');
+  ?>
+ <?php endif ?>

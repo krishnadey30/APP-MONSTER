@@ -2172,3 +2172,25 @@ button.btn1:hover i.fa.fa-paper-plane-o{
 	}
 }
 /*--responsive--*/
+=======
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,100,200,300);
+/* GENERAL RESETS */
+* {
+    margin: 0;
+    padding: 0;
+}
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+a {
+    color: #666;
+    text-decoration: none;
+}
+a:hover {
+    color: #4FDA8C;
+}

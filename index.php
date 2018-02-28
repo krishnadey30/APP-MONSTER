@@ -1,23 +1,33 @@
 <!DOCTYPE html>
 <?php
-        $username = "root";
-        $servername = "localhost";
-        $password = "krishna";
-        $dbname = "play_store";
-        $conn = mysqli_connect($servername , $username , $password , $dbname);
-        if(!$conn)
-        {
-          die("oops connection failed :".mysqli_connect_error());
-        }
-  ?>
+	session_start(); 
+	 unset($_SESSION["install"]);
+	if (isset($_GET['login'])) 
+	{
+	  	$_SESSION['msg'] = "You must log in first";
+	  	header('location: login.php');
+	}
+	if (isset($_GET['logout'])) {
+	  	session_destroy();
+	  	unset($_SESSION['username']);
+	  	header("location: index.php");
+  	}
+    $username = "root";
+    $servername = "localhost";
+    $password = "krishna";
+    $dbname = "play_store";
+    $conn = mysqli_connect($servername , $username , $password , $dbname);
+    if(!$conn)
+    {
+      die("oops connection failed :".mysqli_connect_error());
+    }
+?>
 <html lang="en">
 <head>
 <title>APP MONSTER</title>
 <!-- meta-tags -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="Wacky Trip Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
-Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony Ericsson, Motorola web design" />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
 		function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!-- //meta-tags -->
@@ -51,21 +61,27 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<span class="icon-bar"></span>
 					</button>
 					<div class="w3_navigation_pos">
-						<h1><a href="index.html"><span>A</span>PP <span>m</span>ONSTER</a></h1>
+						<h1><a href="index.html"><span>A</span>PP <span>M</span>ONSTER</a></h1>
 					</div>
 				</div>
 				<!-- Collect the nav links, forms, and other content for toggling -->
-				<!-- <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+				<div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
 					<nav class="cl-effect-4" id="cl-effect-4">
 						<ul class="nav navbar-nav menu__list">
-							<li><a href="index.html">Home</a></li>
-							<li><a href="#about" class=" scroll">About</a></li>
-							<li><a href="#team" class=" scroll">Team</a></li>
-							<li><a href="#gallery" class=" scroll">Destinations</a></li>
-							<li><a href="#contact" class=" scroll">Contact</a></li>
-						</ul>
+							<li><a href="index.php">Home</a></li>
+							 <?php  
+							 if (isset($_SESSION['username'])){?>
+       <li><a href="index.php?logout='1'" ><i class="fa fa-sign-out w3-margin-right"></i>Logout</a> </li> 
+       <li><a href="wishlist.php" ><i class="fa fa-heart w3-margin-right"></i></a> </li><?php
+      }
+      else
+      {
+      	?>
+      	<li><a href="index.php?login='1'" ><i class="fa fa-sign-in w3-margin-right"></i>Login</a> </li></ul><?php
+      }
+			echo $_SESSION['username'];?>			</ul>
 					</nav>
-				</div> -->
+				</div>
 			</nav>	
 	</div>
 	<div class="clearfix"></div>
@@ -184,4 +200,5 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<script src="js/bootstrap.js"></script>
 <!-- //for bootstrap working -->
 </body>
+
 </html>
